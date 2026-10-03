@@ -5,18 +5,36 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 ## 1. What was broken when you started?
 
 - What did the game look like the first time you ran it?
+    When I first ran the game, it opened in the browser as a number guessing
+game with a guess box, a "Show hints" checkbox, and a score. It looked
+normal, but it behaved wrongly as soon as I started guessing. The hints
+were backwards, bad inputs were accepted, nothing confirmed my guess when
+hints were off, and the score behaved strangely.
+
 - List at least two concrete bugs you noticed at the start  
   (for example: "the hints were backwards").
+
+  - **Reversed hints:** When I guessed a number higher than the secret, the
+  game told me to go higher instead of lower.
+- **No range validation:** I guessed -1 and 1000, which are outside the
+  allowed range. The game accepted both as real guesses and gave reversed
+  hints for them (-1 said "go lower" and 1000 said "go higher").
+- **No feedback with hints off:** With "Show hints" unchecked, nothing
+  told me whether my guess had been received.
+- **Broken score:** The score went negative, and at some points it did
+  not change at all after a guess.
 
 **Bug Reproduction Log**
 
 Document at least 3 bugs you found. Add rows as needed.
 
-| Input | Expected Behavior | Actual Behavior | Console Output / Error |
-|-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+| Input Used | Expected Behavior | Actual Behavior | Console Output / Error | Suspected Code Location |
+|------------|-------------------|-----------------|------------------------|-------------------------|
+| A number higher than the secret | Hint tells me to go lower ("Too High") | Hint told me to go higher | none | `app.py`, `check_guess` (hint messages are swapped) |
+| Guess of -1 | Rejected as out of range | Accepted; hint said "go lower" | none | `app.py`, `parse_guess` (no range check) |
+| Guess of 1000 | Rejected as out of range | Accepted; hint said "go higher" | none | `app.py`, `parse_guess` (no range check) |
+| Any guess with "Show hint" unchecked | Some confirmation that the guess was received | Nothing displayed | none | `app.py`, the `if show_hint:` block |
+| Several wrong guesses in a row | Score only goes down on wrong guesses and never goes negative | Score went negative and sometimes did not change | none | `app.py`, `update_score` ("Too High" branch adds or subtracts 5 depending on attempt number) |
 
 ---
 
