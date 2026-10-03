@@ -10,7 +10,7 @@ def get_range_for_difficulty(difficulty: str):
         return 1, 50
     return 1, 100
 
-
+# FIXME: Logic breaks here - no range validation
 def parse_guess(raw: str):
     if raw is None:
         return False, None, "Enter a guess."
@@ -28,7 +28,7 @@ def parse_guess(raw: str):
 
     return True, value, None
 
-
+# FIXME: Logic breaks here - hint messages are reversed
 def check_guess(guess, secret):
     if guess == secret:
         return "Win", "🎉 Correct!"
